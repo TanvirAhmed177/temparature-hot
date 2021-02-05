@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background: url(images/bg-image.jpg) no-repeat;
+        background-size: cover;
+        height: 100vh;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <form class="col-md-6 m-auto py-5">
+        <div class="input-group mb-3">
+          <input
+            id="input-value"
+            type="text"
+            class="form-control"
+            placeholder="Enter a location for Weather ..."
+          />
+          <div class="input-group-append">
+            <button id="btn" type="button" class="btn btn-danger">
+              Search
+            </button>
+          </div>
+        </div>
+      </form>
+      <div class="weather-status text-white text-center">
+        <img
+          id="image"
+          src="https://openweathermap.org/img/wn/02d@2x.png"
+          alt=""
+        />
+        <h1 id="name">Location</h1>
+        <h3><span id="temp">0</span>&deg;C</h3>
+        <h1 id="desc" class="lead">Description</h1>
+      </div>
+    </div>
+    <script>
+      const input = document.getElementById("input-value");
+      const button = document.getElementById("btn");
+      const image = document.getElementById("image");
+      const name = document.getElementById("name");
+      const desc = document.getElementById("desc");
+
+      button.addEventListener("click", function () {
+        fetch(
+          "https://api.openweathermap.org/data/2.5/weather?q=" +
+            input.value +
+            "&appid=5b83d4d8adcd4f046ec24ef14f4fcdea"
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            let tempValue = data["main"]["temp"];
+            tempValue = Math.round(tempValue - 273);
+            let nameValue = data["name"];
+            let descValue = data["weather"][0]["description"];
+            let id = data["weather"][0]["id"];
+            console.log(data);
+            if (id < 250) {
+              image.src = "https://openweathermap.org/img/wn/11d@2x.png";
+            }
+            if (id < 350) {
+              image.src = "https://openweathermap.org/img/wn/09d@2x.png";
+            }
+            if (id < 550) {
+              image.src = "https://openweathermap.org/img/wn/10d@2x.png";
+            }
+            if (id < 650) {
+              image.src = "https://openweathermap.org/img/wn/13d@2x.png";
+            }
+            if (id < 800) {
+              image.src = "https://openweathermap.org/img/wn/50d@2x.png";
+            }
+            if (id === 800) {
+              image.src = "https://openweathermap.org/img/wn/01d@2x.png";
+            }
+            if (id > 800) {
+              image.src = "https://openweathermap.org/img/wn/02d@2x.png";
+            }
+            name.innerHTML = nameValue;
+            desc.innerHTML = descValue;
+            temp.innerHTML = tempValue;
+            input.value = "";
+          })
+          .catch((err) => alert("Wrong city name!"));
+      });
+    </script>
+  </body>
+</html>
